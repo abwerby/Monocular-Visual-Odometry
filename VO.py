@@ -7,8 +7,8 @@ from os.path import isfile, join
 
 
 ## Dataset paths##
-dataset_path = '../dataset/sequences/09/image_0/'
-dataset_pose_path = "../dataset/poses/09.txt"
+dataset_path = '../dataset/sequences/06/image_1/'
+dataset_pose_path = "../dataset/poses/06.txt"
 ## Camera intrinsic paramters ##
 k = np.array([[7.188560000000e+02, 0.000000000000e+00, 6.071928000000e+02],
      [0.000000000000e+00, 7.188560000000e+02, 1.852157000000e+02],
@@ -63,8 +63,8 @@ def featureTracking(image_ref, image_cur, px_ref):
 
 
 def process_first_frames(first_frame, second_frame, k):
-    # det = cv2.FastFeatureDetector_create(threshold=20, nonmaxSuppression=True)
-    det = cv2.ORB_create(nfeatures=2000)
+    det = cv2.FastFeatureDetector_create(threshold=20, nonmaxSuppression=True)
+    # det = cv2.ORB_create(nfeatures=2000)
     kp1 = det.detect(first_frame)
     kp1 = np.array([x.pt for x in kp1], dtype=np.float32)
 
@@ -94,6 +94,8 @@ for i in range(len(seq00_list)):
     change = np.mean(np.abs(kp2 - kp1))
     ## find the scale of the movemnt from the ground truth trajectory ## 
     absolute_scale = getAbsoluteScale(gt_trajectory, i)
+    if absolute_scale > 2 :
+        absolute_scale = 1
     ## check if the vehicle not moving by check the change value ## 
     if change > 5:
         ## accumulate the translation and rotation to find the X, Y, Z locations ## 
@@ -116,13 +118,15 @@ for i in range(len(seq00_list)):
     x_loc.append(x)
     z_loc.append(z)
     ## Draw trajectory ##
-    draw_x, draw_y = int(x)+290, int(z)+90
-    true_x, true_y = int(gt_trajectory[0, i])+290, int(gt_trajectory[2, i])+90
+    draw_x, draw_y = int(x)+100, int(z)+120
+    true_x, true_y = int(gt_trajectory[0, i])+100, int(gt_trajectory[2, i])+120
     cv2.circle(traj, (draw_x,draw_y), 1, (0,0,255), 1)
     cv2.circle(traj, (true_x,true_y), 1, (0,255,0), 2)
-    cv2.rectangle(traj, (10, 20), (600, 60), (0,0,0), -1)
-    text = "Coordinates: x=%2fm y=%2fm z=%2fm"%(x,y,z)
-    cv2.putText(traj, text, (20,40), cv2.FONT_HERSHEY_PLAIN, 1, (255,255,255), 1, 8)
+    cv2.rectangle(traj, (10, 20), (600, 100), (0,0,0), -1)
+    text1 = "VO-Coordinates: x=%2fm y=%2fm z=%2fm"%(x,y,z)
+    text2 = "GT-Coordinates: x=%2fm y=%2fm z=%2fm"%(gt_trajectory[0, i], gt_trajectory[1, i], gt_trajectory[2, i])
+    cv2.putText(traj, text1, (20,40), cv2.FONT_HERSHEY_PLAIN, 1, (255,255,255), 1, 8)
+    cv2.putText(traj, text2, (20,80), cv2.FONT_HERSHEY_PLAIN, 1, (255,255,255), 1, 8)
     cv2.imshow('Road facing camera', new_frame)
     cv2.imshow('Trajectory', traj)
     # Close the frame
@@ -144,3 +148,4 @@ plt.plot(x_loc, z_loc, label="Trajectory")
 plt.plot(gt_trajectory[0], gt_trajectory[2], label="GT-Trajectory")
 plt.legend()
 plt.show()
+
