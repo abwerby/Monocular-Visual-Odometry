@@ -1,0 +1,2 @@
+# Monocular-Visual-Odometry
+Visual odometry is the process of determining the location and orientation (trajectory) of a camera by analyzing a sequence of images. Visual odometry is used in a variety of applications, such as mobile robots, self-driving cars, and unmanned aerial vehicles. Odometry in Robotics is a more general term, and often refers to estimating not only the distance traveled but the entire trajectory of a moving robot.
