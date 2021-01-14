@@ -7,4 +7,8 @@ Visual odometry is the process of determining the location and orientation (traj
 4- Use Nister’s 5-point algorithm with RANSAC to compute the essential matrix.<br />
 5- Estimate R, t from the essential matrix that was computed in the previous step.<br />
 6- Take scale information from some external source (like a speedometer), and concatenate the translation vectors and rotation matrices.<br />
-# [KITTI Dataset](http://www.cvlibs.net/datasets/kitti/eval_odometry.php)
+### [KITTI Dataset](http://www.cvlibs.net/datasets/kitti/eval_odometry.php)
+
+## Results 
+![alt text](https://github.com/abwerby/Monocular-Visual-Odometry/blob/master/map.png)
+![alt text](https://github.com/abwerby/Monocular-Visual-Odometry/blob/master/Figure_1.png)  
